@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController; 
+// import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+// import com.music.app.entity.Playlist;
 import com.music.app.entity.Song;
+// import com.music.app.service.PlayListService;
 import com.music.app.service.SongService;
 
 @RestController
@@ -20,6 +24,8 @@ import com.music.app.service.SongService;
 @CrossOrigin("*")
 public class SongController {
  private final SongService songService;
+
+    
 
  @Autowired
  public SongController(SongService songService) {
@@ -48,5 +54,6 @@ public class SongController {
      Song editedSong = songService.editSong(id, updatedSong);
      return new ResponseEntity<>(editedSong, HttpStatus.OK);
  }
+
  
 }

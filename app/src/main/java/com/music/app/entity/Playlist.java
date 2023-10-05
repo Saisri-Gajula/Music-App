@@ -23,12 +23,12 @@ public class Playlist {
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "playlist_song",
-            joinColumns = @JoinColumn(name = "playlist_id"),
-            inverseJoinColumns = @JoinColumn(name = "song_id")
-    )
+    // @ManyToMany
+    // @JoinTable(
+    //         name = "playlist_song",
+    //         joinColumns = @JoinColumn(name = "playlist_id"),
+    //         inverseJoinColumns = @JoinColumn(name = "song_id")
+    // )
     private List<Song> songs = new ArrayList<>();
 
     public void setName(String name2) {
