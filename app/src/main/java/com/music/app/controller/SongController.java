@@ -17,7 +17,7 @@ import com.music.app.service.SongService;
 
 @RestController
 @RequestMapping("/api/song")
-@CrossOrigin
+@CrossOrigin("*")
 public class SongController {
  private final SongService songService;
 

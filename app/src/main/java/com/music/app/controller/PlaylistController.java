@@ -1,51 +1,32 @@
 package com.music.app.controller;
- 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import com.music.app.entity.Playlist;
 import com.music.app.service.PlayListService;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/playlists")
+@CrossOrigin("*")
 public class PlaylistController {
+    private final PlayListService playlistService;
 
     @Autowired
-    private PlayListService playlistService;
-
-    @GetMapping
-    public ResponseEntity<List<Playlist>> getAllPlaylists() {
-        List<Playlist> playlists = playlistService.getAllPlaylists();
-        return ResponseEntity.ok(playlists);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Playlist> getPlaylistById(@PathVariable Long id) {
-        return playlistService.getPlaylistById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public PlaylistController(PlayListService playlistService) {
+        this.playlistService = playlistService;
     }
 
     @PostMapping
-    public ResponseEntity<Playlist> createPlaylist(@RequestBody Playlist playlist) throws URISyntaxException {
-        Playlist createdPlaylist = playlistService.createPlaylist(playlist);
-        return ResponseEntity.created(new URI("/api/playlists/" + createdPlaylist.getId())).body(createdPlaylist);
+    public ResponseEntity<Playlist> createPlaylist(@RequestParam String name) {
+        Playlist createdPlaylist = playlistService.createPlaylist(name);
+        return new ResponseEntity<>(createdPlaylist, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updatePlaylist(@PathVariable Long id, @RequestBody Playlist updatedPlaylist) {
-        playlistService.updatePlaylist(id, updatedPlaylist);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePlaylist(@PathVariable Long id) {
-        playlistService.deletePlaylist(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/{playlistId}/addSong/{songId}")
+    public ResponseEntity<Void> addToPlaylist(@PathVariable Long playlistId, @PathVariable Long songId) {
+        playlistService.addToPlaylist(playlistId, songId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

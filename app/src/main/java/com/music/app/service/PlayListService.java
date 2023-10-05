@@ -1,39 +1,35 @@
 package com.music.app.service;
- import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.music.app.entity.Playlist;
 import com.music.app.repository.PlaylistRepository;
-
-import java.util.List;
-import java.util.Optional;
-
+import com.music.app.entity.Song; // Import the Song entity
+import com.music.app.repository.SongRepository; // Import the SongRepository
 @Service
 public class PlayListService {
+    private final PlaylistRepository playlistRepository;
+    private final SongRepository songRepository;
 
     @Autowired
-    private PlaylistRepository playlistRepository;
-
-    public List<Playlist> getAllPlaylists() {
-        return playlistRepository.findAll();
+    public PlayListService(PlaylistRepository playlistRepository, SongRepository songRepository) {
+        this.playlistRepository = playlistRepository;
+        this.songRepository = songRepository;
     }
 
-    public Optional<Playlist> getPlaylistById(Long id) {
-        return playlistRepository.findById(id);
-    }
-
-    public Playlist createPlaylist(Playlist playlist) {
+    public Playlist createPlaylist(String name) {
+        Playlist playlist = new Playlist();
+        playlist.setName(name);
         return playlistRepository.save(playlist);
     }
 
-    public void updatePlaylist(Long id, Playlist updatedPlaylist) {
-        if (playlistRepository.existsById(id)) {
-            updatedPlaylist.setId(id);
-            playlistRepository.save(updatedPlaylist);
-        }
-    }
+    public void addToPlaylist(Long playlistId, Long songId) {
+        Playlist playlist = playlistRepository.findById(playlistId)
+                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+        Song song = songRepository.findById(songId)
+                .orElseThrow(() -> new RuntimeException("Song not found"));
 
-    public void deletePlaylist(Long id) {
-        playlistRepository.deleteById(id);
+        playlist.addSong(song); // Use the addSong method to add the song to the playlist
+        playlistRepository.save(playlist);
     }
 }
