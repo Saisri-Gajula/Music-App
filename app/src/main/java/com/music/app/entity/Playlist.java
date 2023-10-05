@@ -31,5 +31,11 @@ public class Playlist {
     )
     private List<Song> songs = new ArrayList<>();
 
+    public void setName(String name2) {
+    }
+
+    public void addSong(Song song) {
+    }
+
     // Constructors, getters, setters
 }
